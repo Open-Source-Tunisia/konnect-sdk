@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "correctness": "all",
+    "suspicious": "all",
+    "perf": "all",
+    "nursery": "all",
+    "style": "warn",
+    "complexity": "warn"
+  }
+}

@@ -1,116 +1,117 @@
-import { KonnectSDK } from './index';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { KonnectSDK } from "./index";
 
 // Mock fetch globally
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
-describe('KonnectSDK', () => {
+describe("KonnectSDK", () => {
   let sdk: KonnectSDK;
-  const mockApiKey = 'test-api-key-12345';
+  const mockApiKey = "test-api-key-12345";
 
   beforeEach(() => {
     sdk = new KonnectSDK({
       apiKey: mockApiKey,
-      environment: 'sandbox',
+      environment: "sandbox",
       defaults: {
-        receiverWalletId: 'default-wallet-id',
-        webhook: 'https://example.com/webhook',
-      }
+        receiverWalletId: "default-wallet-id",
+        webhook: "https://example.com/webhook",
+      },
     });
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  describe('Configuration', () => {
-    it('should create instance with valid config', () => {
+  describe("Configuration", () => {
+    it("should create instance with valid config", () => {
       expect(sdk).toBeInstanceOf(KonnectSDK);
-      expect(sdk.getEnvironment()).toBe('sandbox');
+      expect(sdk.getEnvironment()).toBe("sandbox");
     });
 
-    it('should use defaults from config', () => {
+    it("should use defaults from config", () => {
       const defaults = sdk.getDefaults();
-      expect(defaults.receiverWalletId).toBe('default-wallet-id');
-      expect(defaults.webhook).toBe('https://example.com/webhook');
+      expect(defaults.receiverWalletId).toBe("default-wallet-id");
+      expect(defaults.webhook).toBe("https://example.com/webhook");
     });
 
-    it('should throw error if API key is missing', () => {
+    it("should throw error if API key is missing", () => {
       expect(() => {
-        new KonnectSDK({ apiKey: '' });
-      }).toThrow('API key is required');
+        new KonnectSDK({ apiKey: "" });
+      }).toThrow("API key is required");
     });
   });
 
-  describe('initPayment', () => {
-    it('should initialize payment successfully', async () => {
+  describe("initPayment", () => {
+    it("should initialize payment successfully", async () => {
       const mockResponse = {
-        payUrl: 'https://dev.konnect.network/pay?ref=test123',
-        paymentRef: '60889219a388f75c94a943ec',
+        payUrl: "https://dev.konnect.network/pay?ref=test123",
+        paymentRef: "60889219a388f75c94a943ec",
       };
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
         ok: true,
         json: async () => mockResponse,
       });
 
       const { data, error } = await sdk.initPayment({
         amount: 10000,
-        orderId: 'test-order',
+        orderId: "test-order",
       });
 
       expect(error).toBeNull();
       expect(data).toEqual(mockResponse);
     });
 
-    it('should use defaults for receiverWalletId', async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+    it("should use defaults for receiverWalletId", async () => {
+      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ payUrl: 'test', paymentRef: 'test' }),
+        json: async () => ({ payUrl: "test", paymentRef: "test" }),
       });
 
       await sdk.initPayment({ amount: 10000 });
 
-      const fetchCall = (global.fetch as jest.Mock).mock.calls[0];
+      const fetchCall = (global.fetch as ReturnType<typeof vi.fn>).mock.calls[0];
       const body = JSON.parse(fetchCall[1].body);
-      
-      expect(body.receiverWalletId).toBe('default-wallet-id');
+
+      expect(body.receiverWalletId).toBe("default-wallet-id");
     });
 
-    it('should return error on validation failure', async () => {
+    it("should return error on validation failure", async () => {
       const { data, error } = await sdk.initPayment({
         amount: -100, // Invalid amount
       });
 
       expect(data).toBeNull();
       expect(error).toBeDefined();
-      expect(error?.code).toBe('VALIDATION_ERROR');
+      expect(error?.code).toBe("VALIDATION_ERROR");
     });
   });
 
-  describe('getPaymentDetails', () => {
-    it('should get payment details successfully', async () => {
+  describe("getPaymentDetails", () => {
+    it("should get payment details successfully", async () => {
       const mockDetails = {
         payment: {
-          id: 'test-id',
-          status: 'completed',
+          id: "test-id",
+          status: "completed",
           amount: 10000,
-          token: 'TND',
+          token: "TND",
         },
       };
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
         ok: true,
         json: async () => mockDetails,
       });
 
-      const { data, error } = await sdk.getPaymentDetails('test-payment-id');
+      const { data, error } = await sdk.getPaymentDetails("test-payment-id");
 
       expect(error).toBeNull();
       expect(data).toEqual(mockDetails);
     });
 
-    it('should return error for invalid payment ID', async () => {
-      const { data, error } = await sdk.getPaymentDetails('');
+    it("should return error for invalid payment ID", async () => {
+      const { data, error } = await sdk.getPaymentDetails("");
 
       expect(data).toBeNull();
-      expect(error?.code).toBe('VALIDATION_ERROR');
+      expect(error?.code).toBe("VALIDATION_ERROR");
     });
   });
 });

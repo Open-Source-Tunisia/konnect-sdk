@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "✨ Commit message hook - add conventional commits validation here if needed"

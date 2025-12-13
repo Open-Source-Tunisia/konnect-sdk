@@ -1,10 +1,12 @@
 node_modules/
 dist/
+.cache/
+
 coverage/
 *.log
 .env
 .DS_Store
-.vscode/
+**/.vscode
 .idea/
 *.swp
 *.swo

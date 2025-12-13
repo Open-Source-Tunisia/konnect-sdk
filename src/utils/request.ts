@@ -2,11 +2,16 @@
  * HTTP request utilities with retry logic
  */
 
-import { KonnectSDKError, AuthenticationError, PaymentNotFoundError, ValidationError } from '../errors';
+import {
+  KonnectSDKError,
+  AuthenticationError,
+  PaymentNotFoundError,
+  ValidationError,
+} from "../errors";
 
 /**
  * Makes an HTTP request with retry logic and exponential backoff
- * 
+ *
  * @param url - Full URL to request
  * @param options - Fetch options
  * @param config - Request configuration
@@ -19,7 +24,7 @@ export async function makeRequest<T>(
   config: {
     timeout: number;
     retryAttempts: number;
-  }
+  },
 ): Promise<T> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), config.timeout);
@@ -62,15 +67,15 @@ export async function makeRequest<T>(
 
   clearTimeout(timeoutId);
   throw new KonnectSDKError(
-    lastError?.message || 'Request failed after retries',
+    lastError?.message || "Request failed after retries",
     undefined,
-    'REQUEST_FAILED'
+    "REQUEST_FAILED",
   );
 }
 
 /**
  * Handles error responses from the API
- * 
+ *
  * @param response - HTTP response object
  * @throws {AuthenticationError} If authentication fails (401)
  * @throws {PaymentNotFoundError} If payment not found (404)
@@ -79,7 +84,7 @@ export async function makeRequest<T>(
  */
 export async function handleErrorResponse(response: Response): Promise<never> {
   let errorData: unknown;
-  
+
   try {
     errorData = await response.json();
   } catch {
@@ -92,28 +97,25 @@ export async function handleErrorResponse(response: Response): Promise<never> {
     case 401:
       throw new AuthenticationError();
     case 404:
-      throw new PaymentNotFoundError((data.paymentId as string) || 'unknown');
+      throw new PaymentNotFoundError((data.paymentId as string) || "unknown");
     case 400:
-      throw new ValidationError(
-        (data.message as string) || 'Validation failed',
-        data
-      );
+      throw new ValidationError((data.message as string) || "Validation failed", data);
     default:
       throw new KonnectSDKError(
         (data.message as string) || `HTTP ${response.status}: ${response.statusText}`,
         response.status,
         data.code as string,
-        data
+        data,
       );
   }
 }
 
 /**
  * Sleep utility for retry logic with exponential backoff
- * 
+ *
  * @param ms - Milliseconds to sleep
  * @returns Promise that resolves after the specified time
  */
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

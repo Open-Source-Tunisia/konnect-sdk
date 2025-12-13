@@ -591,11 +591,10 @@ For complete API documentation, visit [Konnect Documentation](https://docs.konne
 
 For issues or feature requests:
 
-- 𝕏   [Twitter/X](https://x.com/azizbechaa)
+- 𝕏 [Twitter/X](https://x.com/azizbechaa)
 - 🐛 [GitHub Issues](https://github.com/azizbecha/konnect-sdk/issues)
 - 💬 [Community Discussion](https://github.com/azizbecha/konnect-sdk/discussions)
 
 For official Konnect support, visit [konnect.network](https://konnect.network)
-
 
 **Made with ❤️ for the Tunisian developer community**

@@ -1,10 +1,10 @@
-export type Environment = 'sandbox' | 'production';
-export type PaymentToken = 'TND' | 'EUR' | 'USD';
-export type PaymentType = 'immediate' | 'partial';
-export type PaymentMethod = 'wallet' | 'bank_card' | 'e-DINAR';
-export type Theme = 'light' | 'dark';
-export type PaymentStatus = 'completed' | 'pending';
-export type TransactionStatus = 'success' | 'failed' | 'pending';
+export type Environment = "sandbox" | "production";
+export type PaymentToken = "TND" | "EUR" | "USD";
+export type PaymentType = "immediate" | "partial";
+export type PaymentMethod = "wallet" | "bank_card" | "e-DINAR";
+export type Theme = "light" | "dark";
+export type PaymentStatus = "completed" | "pending";
+export type TransactionStatus = "success" | "failed" | "pending";
 
 /**
  * Default configuration values for payment initialization

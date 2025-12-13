@@ -1,0 +1,18 @@
+{
+  "rules": {
+    "correctness": "allow",
+    "suspicious": "allow",
+    "perf": "allow",
+    "nursery": "allow",
+    "style": "warn",
+    "complexity": "warn"
+  },
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "globals": {
+    "fetch": true,
+    "Buffer": true
+  }
+}
