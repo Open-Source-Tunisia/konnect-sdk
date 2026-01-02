@@ -461,4 +461,4 @@ For issues or feature requests:
 
 For official Konnect support, visit [konnect.network](https://konnect.network)
 
-**Made by [azizbecha](https://github.com/azizbecha) under the [Open Source Tunisia](github.com/open-source-tunisia/konnect-sdk/) organization**
+**Made by [azizbecha](https://github.com/azizbecha) and [the contributors](https://github.com/open-source-tunisia/konnect-sdk/graphs/contributors) under the [Open Source Tunisia](https://github.com/open-source-tunisia/konnect-sdk/) organization**
